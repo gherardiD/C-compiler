@@ -8,7 +8,7 @@
 Token makeToken(TokenType type, const char *value) {
     Token token;
     token.type = type;
-    token.value = strdup(value);  // allocate string
+    token.value = strdup(value);  // allocate string, returns pointer to new string
     return token;
 }
 
@@ -98,7 +98,6 @@ int isInteger(char *str) {
 }
 
 
-// TO IMPLEMENT
 int isFloat(char *str){
     int i = 0;
     int hasDigit = 0;
