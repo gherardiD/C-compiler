@@ -1,5 +1,5 @@
-#ifndef PARSER.H
-#define PARSER.H
+#ifndef PARSER_H
+#define PARSER_H
 
 #include "lexer.h"
 
@@ -121,6 +121,32 @@ typedef struct ASTNode {
             struct ASTNode *expr;
         } returnStmt;
 
+        // expression statement
+        struct {
+            struct ASTNode *expr;
+        } exprStmt;
+
+        // array declaration
+        struct {
+            char *dataType;
+            char *name;
+            struct ASTNode *size;
+            struct ASTNode *init;
+        } arrayDecl;
+
+        // array access
+        struct {
+            struct ASTNode *array;
+            struct ASTNode *index;
+        } arrayAccess;
+
+        // program root data
+        struct {
+            struct ASTNode **declarations;
+            int count;
+            int capacity;
+        } program;
+
     } data;
 } ASTNode;
 
@@ -137,20 +163,17 @@ typedef struct {
 Parser *createParser(Token *tokens, int token_count);
 void freeParser(Parser *parser);
 
-// main parsing function
-ASTNode *parseProgram(Parser *parser);
-
 // Base AST node creation function
 ASTNode *createASTNode(ASTNodeType type);
 
 // helpers to create specific AST nodes
 ASTNode *createASTBinaryOp(const char *op, ASTNode *left, ASTNode *right);
-ASTNode *createASTBinaryOp(const char *op, ASTNode *operand);
+ASTNode *createASTUnaryOp(const char *op, ASTNode *operand);
 ASTNode *createASTLiteral(ASTNodeType type, const char *value);
 ASTNode *createASTVarDecl(const char *dataType, const char *name, ASTNode *init);
 
 void freeAST(ASTNode *node);
-void addChild(ASTNode *parent, ASTNode *child);
+// void addChild(ASTNode *parent, ASTNode *child);      probably not needed
 
 // token navigation functions
 void advance(Parser *parser);
@@ -159,6 +182,7 @@ int match(Parser *parser, TokenType type);
 int matchValue(Parser *parser, const char *value);
 int expect(Parser *parser, TokenType type);
 int expextValue(Parser *parser, const char *value);
+int expectValue(Parser *parser, const char *value);
 
 
 ASTNode* parseProgram(Parser *parser);           // Entry point for parsing

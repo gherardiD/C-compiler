@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "lexer.h"
-
+#include "parser.h"
 
 int main(int argc, char *argv[]) {
+    const char *filepath = (argc > 1) ? argv[1] : "test.txt";
     FILE *filePointer;
 
-    // Open the file passed as a command line argument
-    filePointer = fopen(argv[1], "r");
+    // Open the file passed as a command line argument (or default test.txt)
+    filePointer = fopen(filepath, "r");
     if (filePointer == NULL) {
-        printf("Could not open file %s\n", argv[1]);
+        printf("Could not open file %s\n", filepath);
         return 1;
     }
 
@@ -19,9 +21,29 @@ int main(int argc, char *argv[]) {
     char *buffer = malloc(size + 1);
     fread(buffer, 1, size, filePointer);
     buffer[size] = '\0';
+    fclose(filePointer);
+
+    printf("=== LEXER TOKENS ===\n");
     Token *tokens = analize(buffer);
     free(buffer);
-    fclose(filePointer);
-    return 0;
 
+    printf("\n=== PARSER AST ===\n");
+    Parser *parser = createParser(tokens, 0);
+    ASTNode *ast = parseProgram(parser);
+    printAST(ast, 0);
+
+    // Cleanup
+    freeAST(ast);
+    freeParser(parser);
+
+    int i = 0;
+    while (tokens[i].value != NULL) {
+        int isEof = (tokens[i].type == TOKEN_INVALID && strcmp(tokens[i].value, "EOF") == 0);
+        freeToken(tokens[i]);
+        if (isEof) break;
+        i++;
+    }
+    free(tokens);
+
+    return 0;
 }

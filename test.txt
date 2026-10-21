@@ -1,0 +1,53 @@
+// Comprehensive test program for Lexer and Parser
+
+/* Function to calculate the sum of two integers */
+int add(int a, int b) {
+    return a + b;
+}
+
+/* Function to demonstrate control flow and loops */
+void processData(int limit) {
+    int counter = 0;
+
+    // While loop with if-else and continue
+    while (counter < limit) {
+        if (counter == 3) {
+            counter += 1;
+            continue;
+        } else {
+            counter = counter + 1;
+        }
+    }
+
+    // For loop with break
+    for (int i = 0; i < 10; i = i + 1) {
+        if (i == 5) {
+            break;
+        }
+    }
+}
+
+/* Main entry point */
+int main() {
+    int x = 15;
+    int y = 25;
+    float pi = 3.14;
+    char *greeting = "Hello, Compiler!";
+
+    // Function call and variable initialization
+    int sum = add(x, y);
+
+    // Array declaration and access
+    int numbers[5];
+    numbers[0] = sum;
+    numbers[1] = sum * 2;
+
+    int total = numbers[0] + numbers[1];
+
+    if (total > 50) {
+        processData(total);
+        return total;
+    } else {
+        return 0;
+    }
+}
