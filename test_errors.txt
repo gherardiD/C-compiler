@@ -1,0 +1,46 @@
+// Test program with intentional semantic errors to verify error reporting
+
+void voidFunc() {
+    return 42; // Error: Void function cannot return a value
+}
+
+int math(int a, int b) {
+    int a = 10; // Error: Redeclaration of 'a' in the same scope
+    return a + b;
+}
+
+int main() {
+    int x = 10;
+    void badVar; // Error: Variable 'badVar' declared with void type
+
+    // Use of undeclared identifier
+    y = 20; // Error: Use of undeclared identifier 'y'
+
+    // Break outside of a loop
+    break; // Error: 'break' statement not within a loop
+
+    // Incompatible assignment
+    char *msg = "hello";
+    x = msg; // Error: Incompatible types in assignment
+
+    // Left hand side not an lvalue
+    5 = x; // Error: Left hand side of assignment must be an lvalue
+
+    // Function call errors
+    math(x); // Error: Function 'math' expects 2 argument(s), but 1 were provided
+    math(x, msg); // Error: Incompatible type for argument 2
+
+    // Array errors
+    int arr[5];
+    x[0] = 1; // Error: Subscripted value is not an array or pointer
+    arr[msg] = 2; // Error: Array subscript is not an integer
+    arr = 10; // Error: Left hand side must be an lvalue (cannot assign to array)
+
+    // Scope check
+    {
+        int inner = 99;
+    }
+    int outside = inner; // Error: Use of undeclared identifier 'inner'
+
+    return "done"; // Error: Incompatible return type: expected 'int', got 'char*'
+}

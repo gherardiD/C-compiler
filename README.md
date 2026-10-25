@@ -23,7 +23,7 @@ The project aims to implement a complete compilation pipeline for a simple C-lik
 |:--------|:--------:|:------------|
 | **Lexer** | Done | Handles keywords, identifiers, literals, operators, and punctuators |
 | **Parser** | Done | Recursive descent parser producing a typed Abstract Syntax Tree (AST) |
-| **Semantic Analyzer** | Planned | Type and scope validation |
+| **Semantic Analyzer** | Done | Scope management, symbol table, type checking, and validation |
 | **IR Generator** | Planned | Intermediate representation creation |
 | **Optimizer** | Planned | Basic code optimization |
 | **Code Generator** | Planned | Produces target assembly or machine code |
@@ -86,11 +86,14 @@ The lexer and parser recognize a rich subset of the C grammar:
 
 Compile the compiler:
 ```bash
-gcc -Wall -Wextra -pedantic main.c lexer.c parser.c -o compiler
+gcc -Wall -Wextra -pedantic main.c lexer.c parser.c semantic.c -o compiler
 ```
 
 Run against a test source file:
 ```bash
 ./compiler test.txt
 ```
-This prints the stream of lexed tokens followed by the hierarchical Abstract Syntax Tree (AST).
+This prints:
+1. The stream of lexed tokens.
+2. The hierarchical Abstract Syntax Tree (AST).
+3. The semantic analysis results and global symbol table.

@@ -1,0 +1,16 @@
+// Test shadowing in nested blocks
+
+int x = 10;
+
+int test() {
+    int x = 20; // shadows global x
+    if (x == 20) {
+        int x = 30; // shadows outer x
+        x = x + 1;
+    }
+    return x; // returns 20
+}
+
+int main() {
+    return test();
+}

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "lexer.h"
 #include "parser.h"
+#include "semantic.h"
 
 int main(int argc, char *argv[]) {
     const char *filepath = (argc > 1) ? argv[1] : "test.txt";
@@ -32,7 +33,19 @@ int main(int argc, char *argv[]) {
     ASTNode *ast = parseProgram(parser);
     printAST(ast, 0);
 
+    printf("\n=== SEMANTIC ANALYSIS ===\n");
+    SemanticAnalyzer *analyzer = createSemanticAnalyzer();
+    int errors = analyzeProgram(analyzer, ast);
+    if (errors == 0) {
+        printf("Semantic analysis completed successfully with 0 errors.\n");
+        printf("\n=== GLOBAL SYMBOL TABLE ===\n");
+        printSymbolTable(analyzer);
+    } else {
+        printf("Semantic analysis completed with %d error(s).\n", errors);
+    }
+
     // Cleanup
+    freeSemanticAnalyzer(analyzer);
     freeAST(ast);
     freeParser(parser);
 
