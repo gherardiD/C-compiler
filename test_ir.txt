@@ -1,0 +1,66 @@
+// Comprehensive test file for Three-Address Code (TAC) Intermediate Representation (IR)
+
+int compute(int x, int y) {
+    int sum = x + y;
+    int diff = x - y;
+    int prod = sum * diff;
+    int quot = prod / 2;
+    int rem = quot % 3;
+    return rem;
+}
+
+int logicTest(int a, int b) {
+    // Test logical AND and OR with short-circuiting
+    if (a > 0 && b > 0) {
+        return 1;
+    }
+
+    if (a < 0 || b < 0) {
+        return -1;
+    }
+
+    return 0;
+}
+
+void nestedLoopTest(int rows, int cols) {
+    int r = 0;
+    while (r < rows) {
+        for (int c = 0; c < cols; c = c + 1) {
+            if (c == 2) {
+                continue;
+            }
+            if (c == 4) {
+                break;
+            }
+        }
+        r += 1;
+    }
+}
+
+int main() {
+    int val1 = 10;
+    int val2 = 4;
+
+    // Compound assignment tests
+    val1 -= 2;
+    val1 *= 3;
+    val1 /= 2;
+
+    // Unary tests
+    int neg = -val1;
+    int notVal = !val2;
+
+    // Function calls
+    int res = compute(val1, val2);
+    int flag = logicTest(val1, neg);
+
+    nestedLoopTest(3, 5);
+
+    // Array manipulation
+    int list[3];
+    list[0] = res;
+    list[1] = flag;
+    list[2] = list[0] + list[1];
+
+    return list[2];
+}

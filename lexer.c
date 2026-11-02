@@ -56,7 +56,8 @@ int isDelimiter(char ch) {
         ch == '/' || ch == ',' || ch == ';' || ch == '>' ||
         ch == '<' || ch == '=' || ch == '(' || ch == ')' ||
         ch == '[' || ch == ']' || ch == '{' || ch == '}' ||
-        ch == '\n' || ch == '\t') {
+        ch == '\n' || ch == '\t' || ch == '!' || ch == '&' ||
+        ch == '|' || ch == '%' || ch == '^' || ch == '~') {
         return 1;
     }
     return 0;
@@ -66,12 +67,12 @@ int isOperator(char ch) {
     return ch == '+' || ch == '-' || ch == '*' ||
            ch == '/' || ch == '=' || ch == '<' ||
            ch == '>' || ch == '!' || ch == '&' ||
-           ch == '|' || ch == '^' || ch == '%';
+           ch == '|' || ch == '^' || ch == '%' || ch == '~';
 }
 
 int getOperatorLength(char c1, char c2) {
-    char *twoCharOps[] = {"++", "--", "+=", "-=", "*=", "/=", "==", "!=", "<=", ">="};
-    for (int i = 0; i < 10; i++) {
+    char *twoCharOps[] = {"++", "--", "+=", "-=", "*=", "/=", "==", "!=", "<=", ">=", "&&", "||"};
+    for (int i = 0; i < 12; i++) {
         if (twoCharOps[i][0] == c1 && twoCharOps[i][1] == c2)
             return 2;
     }
@@ -172,20 +173,13 @@ Token * analize(char *input) {
     int len = strlen(input);
 
 
-    // If you want to make it scalable,
-    // you can replace MAX_TOKENS with a dynamic resize using realloc(), like this:
-    // if (tokenCount >= capacity) {
-    //     capacity *= 2;
-    //     tokens = realloc(tokens, sizeof(Token) * capacity);
-    // }
 
     Token *tokens = (Token *)malloc(sizeof(Token) * MAX_TOKENS);
     int tokenCount = 0;
 
     while (right <= len) {
 
-        // GETSTRING FUNCTION ALREADY UPDATES left AND right
-        // AND ALREADY MEAKES THE TOKEN AND RETURNS IT
+        // getString updates right and left.
         Token t;
         if (input[right] == '"' || input[right] == '\'') {
             t = getString(input, &left, &right);

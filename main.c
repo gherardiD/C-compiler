@@ -4,12 +4,12 @@
 #include "lexer.h"
 #include "parser.h"
 #include "semantic.h"
+#include "ir.h"
 
 int main(int argc, char *argv[]) {
     const char *filepath = (argc > 1) ? argv[1] : "test.txt";
     FILE *filePointer;
 
-    // Open the file passed as a command line argument (or default test.txt)
     filePointer = fopen(filepath, "r");
     if (filePointer == NULL) {
         printf("Could not open file %s\n", filepath);
@@ -36,15 +36,23 @@ int main(int argc, char *argv[]) {
     printf("\n=== SEMANTIC ANALYSIS ===\n");
     SemanticAnalyzer *analyzer = createSemanticAnalyzer();
     int errors = analyzeProgram(analyzer, ast);
+    IRProgram *irProgram = NULL;
+
     if (errors == 0) {
         printf("Semantic analysis completed successfully with 0 errors.\n");
         printf("\n=== GLOBAL SYMBOL TABLE ===\n");
         printSymbolTable(analyzer);
+
+        printf("\n=== INTERMEDIATE REPRESENTATION (IR) ===\n");
+        irProgram = generateIR(ast);
+        printIR(irProgram);
     } else {
         printf("Semantic analysis completed with %d error(s).\n", errors);
     }
 
-    // Cleanup
+    if (irProgram) {
+        freeIRProgram(irProgram);
+    }
     freeSemanticAnalyzer(analyzer);
     freeAST(ast);
     freeParser(parser);
@@ -58,5 +66,5 @@ int main(int argc, char *argv[]) {
     }
     free(tokens);
 
-    return 0;
+    return (errors == 0) ? 0 : 1;
 }

@@ -24,7 +24,7 @@ The project aims to implement a complete compilation pipeline for a simple C-lik
 | **Lexer** | Done | Handles keywords, identifiers, literals, operators, and punctuators |
 | **Parser** | Done | Recursive descent parser producing a typed Abstract Syntax Tree (AST) |
 | **Semantic Analyzer** | Done | Scope management, symbol table, type checking, and validation |
-| **IR Generator** | Planned | Intermediate representation creation |
+| **IR Generator** | Done | Three-Address Code (TAC) intermediate representation generator |
 | **Optimizer** | Planned | Basic code optimization |
 | **Code Generator** | Planned | Produces target assembly or machine code |
 
@@ -82,11 +82,22 @@ The lexer and parser recognize a rich subset of the C grammar:
 
 ---
 
+### 8. Intermediate Representation (IR)
+- Linear **Three-Address Code (TAC)** representation using a doubly-linked instruction list
+- Compiler-generated temporary variables (`t0`, `t1`, ...) for expression decomposition
+- Label generation (`L0`, `L1`, ...) and control flow lowering (`if`, `ifFalse`, `goto`)
+- Boolean short-circuit evaluation for `&&` and `||`
+- Function call lowering (`arg`, `call`, `param`, `return`)
+- Array allocation and indexing (`alloc`, `dest = arr[i]`, `arr[i] = src`)
+- Loop context stack supporting arbitrarily nested `while` and `for` loops with `break` and `continue`
+
+---
+
 ## Building and Running
 
 Compile the compiler:
 ```bash
-gcc -Wall -Wextra -pedantic main.c lexer.c parser.c semantic.c -o compiler
+gcc -Wall -Wextra -pedantic main.c lexer.c parser.c semantic.c ir.c -o compiler
 ```
 
 Run against a test source file:
@@ -97,3 +108,4 @@ This prints:
 1. The stream of lexed tokens.
 2. The hierarchical Abstract Syntax Tree (AST).
 3. The semantic analysis results and global symbol table.
+4. The generated Three-Address Code (TAC) Intermediate Representation.
